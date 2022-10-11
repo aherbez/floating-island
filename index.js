@@ -403,6 +403,11 @@ export default e => {
   const gridMesh = new THREE.Mesh(geometry, material);
   app.add(gridMesh);
 
+  const sphereMesh = new THREE.Mesh(THREE.SphereGeometry(0.1, 32, 32), new THREE.MeshBasicMaterial({
+    color: 0xff0000,
+  }));
+  app.add(sphereMesh);
+
   const physics = usePhysics();
   const physicsId = physics.addGeometry(gridMesh);
   useCleanup(() => {
