@@ -89,7 +89,7 @@ export default e => {
       const d = _closestDistanceToLine(x, y); // localVector2D.set(x, y).manhattanDistanceTo(localVector2D2);
       const z = (10 + simplex.noise2D(x/100, y/100)) * (d/maxDistance)**0.5;
       // console.log('got distance', z, d/maxDistance);
-      bottomGeometry.attributes.position.array[i+2] = z;
+      // bottomGeometry.attributes.position.array[i+2] = z;
     }
     bottomGeometry.applyMatrix4(new THREE.Matrix4().makeRotationFromQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, -1, 0))));
 
@@ -268,6 +268,7 @@ export default e => {
         ${THREE.ShaderChunk.logdepthbuf_vertex}
       }
     `,
+    /*
     fragmentShader: `\
       precision highp float;
       precision highp int;
@@ -335,7 +336,15 @@ export default e => {
         
         // gl_FragColor = sRGBToLinear(gl_FragColor);
 
+        gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+
         ${THREE.ShaderChunk.logdepthbuf_fragment}
+      }
+    `,
+    */
+    fragmentShader: `\
+      void main() {
+        gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
       }
     `,
     
@@ -396,24 +405,27 @@ export default e => {
     side: THREE.DoubleSide,
     // lights: true,
   });
-  const gridMesh = new THREE.Mesh(geometry, material);
-  app.add(gridMesh);
+  const gridMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+    color: 0x00ff00
+  }));
+  // app.add(gridMesh);
 
-  const sphereMesh = new THREE.Mesh(THREE.SphereGeometry(3, 32, 32), new THREE.MeshBasicMaterial({
+  const sphereMesh = new THREE.Mesh(THREE.SphereGeometry(20, 32, 32), new THREE.MeshBasicMaterial({
     color: 0xff0000,
   }));
-  sphereMesh.position.set(0, 2, 0);
+  sphereMesh.position.set(20, 2, 0);
   app.add(sphereMesh);
 
   const physics = usePhysics();
-  const physicsId = physics.addGeometry(gridMesh);
+  // const physicsId = physics.addGeometry(gridMesh);
+  
   useCleanup(() => {
-    physics.removeGeometry(physicsId);
+    // physics.removeGeometry(physicsId);
   });
 
   /* renderer.setAnimationLoop(() => {
     planetUpdate();
   }); */
-
+  console.log(gridMesh, sphereMesh);
   return app;
 };
