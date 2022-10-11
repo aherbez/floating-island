@@ -323,10 +323,6 @@ export default e => {
       const vec3 lineColor1 = vec3(${new THREE.Color(0xef5350).toArray().join(', ')});
       const vec3 lineColor2 = vec3(${new THREE.Color(0xff7043).toArray().join(', ')});
       const vec3 sunDirection = normalize(vec3(-1, -2, -3));
-      
-      vec4 sRGBToLinear( in vec4 value ) {
-        return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.a );
-      }
 
       void main() {
         vec3 normal = normalize(-cross(dFdx(eyeVec.xyz), dFdy(eyeVec.xyz)));
@@ -403,9 +399,10 @@ export default e => {
   const gridMesh = new THREE.Mesh(geometry, material);
   app.add(gridMesh);
 
-  const sphereMesh = new THREE.Mesh(THREE.SphereGeometry(0.1, 32, 32), new THREE.MeshBasicMaterial({
+  const sphereMesh = new THREE.Mesh(THREE.SphereGeometry(3, 32, 32), new THREE.MeshBasicMaterial({
     color: 0xff0000,
   }));
+  sphereMesh.position.set(0, 2, 0);
   app.add(sphereMesh);
 
   const physics = usePhysics();
